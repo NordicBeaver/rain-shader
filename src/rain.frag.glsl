@@ -12,11 +12,14 @@ vec2 Drops(vec2 uv) {
   float cellsResolution = 10.0;
   vec2 uvRepeated = uv * cellsResolution;
   vec2 cellIndex = floor(uvRepeated);
+  vec2 cellUv = fract(uvRepeated);
   vec2 random = Random22(cellIndex);
-  return random;
+  float distanceFromDrop = distance(cellUv, random);
+  float drop = smoothstep(0.2, 0.0, distanceFromDrop);
+  return vec2(drop);
 }
 
 void main() {
   vec2 drops = Drops(uvInterpolator.xy);
-  gl_FragColor = vec4(drops, 0, 1);
+  gl_FragColor = vec4(drops, 0.0, 1.0);
 }
