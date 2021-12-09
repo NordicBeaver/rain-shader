@@ -13,6 +13,15 @@ vec2 Random22(vec2 inputValue) {
   return vec2(Random21(inputValue, 34245.43), Random21(inputValue, 76453.435));
 }
 
+vec3 BaseColor(vec2 uv) {
+  uv *= 30.0;
+  uv = fract(uv);
+  float horizontalLines = step(0.9, uv.y);
+  float verticalLines = step(0.9, uv.x);
+  float intensity = clamp(horizontalLines + verticalLines, 0.0, 1.0);
+  return vec3(intensity);
+}
+
 vec2 Drops(vec2 uv, float seed) {
   float shiftY = Random11(0.5, seed);
   uv.y += shiftY;
@@ -42,5 +51,6 @@ void main() {
   vec2 drops2 = Drops(uvInterpolator.xy, 23213.465);
   vec2 drops3 = Drops(uvInterpolator.xy, 74654.432);
   vec2 drops = drops1 + drops2 + drops3;
-  gl_FragColor = vec4(drops, 0.0, 1.0);
+  vec3 base = BaseColor(uvInterpolator);
+  gl_FragColor = vec4(base, 1.0);
 }
