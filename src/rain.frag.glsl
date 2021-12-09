@@ -1,5 +1,11 @@
 in vec2 uvInterpolator;
 
+vec2 Drops(vec2 uv) {
+  vec2 uvRepeated = fract(uv * 10.0);
+  return uvRepeated;
+}
+
 void main() {
-  gl_FragColor = vec4(uvInterpolator.xy, 0, 1);
+  vec2 drops = Drops(uvInterpolator.xy);
+  gl_FragColor = vec4(drops, 0, 1);
 }
