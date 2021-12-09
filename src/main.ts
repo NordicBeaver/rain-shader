@@ -14,12 +14,12 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 app.appendChild(renderer.domElement);
 
-const cubeGeometry = new THREE.BoxGeometry();
-const cubeMaterial = new THREE.ShaderMaterial({
+const geometry = new THREE.PlaneGeometry(10, 10, 1, 1);
+const material = new THREE.ShaderMaterial({
   vertexShader: rainVertShader,
   fragmentShader: rainFragShader,
 });
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
 function animationFrame() {
