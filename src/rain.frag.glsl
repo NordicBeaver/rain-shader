@@ -41,16 +41,26 @@ vec2 Drops(vec2 uv, float seed) {
 
   float isDropShown = step(0.8, Random21(cellIndex, seed + 14244.324));
   float dropIntensity = 1.0 - fract(u_time * 0.2 + Random21(cellIndex, seed + 32132.432) * 2.0) * 2.0;
+  dropIntensity = clamp(dropIntensity, 0.0, 1.0);
+  float isInsideDrop = 1.0 - step(0.1, distanceFromCenter);
 
-  float drop = clamp(smoothstep(0.2, 0.0, distanceFromCenter) * isDropShown * dropIntensity, 0.0, 1.0);
-  return vec2(drop);
+  vec2 dropValue = normalize(cellUv - cellCenter) * distanceFromCenter * distanceFromCenter;
+
+  vec2 drop = dropValue * isInsideDrop * isDropShown * dropIntensity;
+  return drop;
 }
 
 void main() {
-  vec2 drops1 = Drops(uvInterpolator.xy, 432424.43);
-  vec2 drops2 = Drops(uvInterpolator.xy, 23213.465);
-  vec2 drops3 = Drops(uvInterpolator.xy, 74654.432);
+  vec2 uv = uvInterpolator;
+  vec2 drops1 = Drops(uv, 432424.43);
+  vec2 drops2 = Drops(uv, 23213.465);
+  vec2 drops3 = Drops(uv, 74654.432);
   vec2 drops = drops1 + drops2 + drops3;
-  vec3 base = BaseColor(uvInterpolator);
-  gl_FragColor = vec4(base, 1.0);
+
+  uv -= drops * 10.0;
+  uv = fract(uv * 10.0);
+
+  vec3 base = BaseColor(uv);
+  // gl_FragColor = vec4(base, 1.0);
+  gl_FragColor = vec4(uv, 0.0, 1.0);
 }
