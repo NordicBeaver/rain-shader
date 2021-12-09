@@ -1,8 +1,10 @@
 in vec2 uvInterpolator;
 
 vec2 Drops(vec2 uv) {
-  vec2 uvRepeated = fract(uv * 10.0);
-  return uvRepeated;
+  float cellsResolution = 10.0;
+  vec2 uvRepeated = uv * cellsResolution;
+  vec2 cellIndex = floor(uvRepeated);
+  return cellIndex / cellsResolution;
 }
 
 void main() {
