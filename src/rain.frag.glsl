@@ -1,5 +1,6 @@
 in vec2 uvInterpolator;
 uniform float u_time;
+uniform sampler2D u_texture;
 
 float Random11(float inputValue, float seed) {
   return fract(sin(inputValue * 345.456) * seed);
@@ -11,15 +12,6 @@ float Random21(vec2 inputValue, float seed) {
 
 vec2 Random22(vec2 inputValue) {
   return vec2(Random21(inputValue, 34245.43), Random21(inputValue, 76453.435));
-}
-
-vec3 BaseColor(vec2 uv) {
-  uv *= 30.0;
-  uv = fract(uv);
-  float horizontalLines = step(0.9, uv.y);
-  float verticalLines = step(0.9, uv.x);
-  float intensity = clamp(horizontalLines + verticalLines, 0.0, 1.0);
-  return vec3(intensity);
 }
 
 vec2 Drops(vec2 uv, float seed) {
@@ -44,7 +36,8 @@ vec2 Drops(vec2 uv, float seed) {
   dropIntensity = clamp(dropIntensity, 0.0, 1.0);
   float isInsideDrop = 1.0 - step(0.1, distanceFromCenter);
 
-  vec2 dropValue = normalize(cellUv - cellCenter) * distanceFromCenter * distanceFromCenter;
+  vec2 vecToCenter = normalize(cellUv - cellCenter);
+  vec2 dropValue = vecToCenter * distanceFromCenter * distanceFromCenter;
 
   vec2 drop = dropValue * isInsideDrop * isDropShown * dropIntensity;
   return drop;
@@ -52,15 +45,14 @@ vec2 Drops(vec2 uv, float seed) {
 
 void main() {
   vec2 uv = uvInterpolator;
-  vec2 drops1 = Drops(uv, 432424.43);
-  vec2 drops2 = Drops(uv, 23213.465);
-  vec2 drops3 = Drops(uv, 74654.432);
-  vec2 drops = drops1 + drops2 + drops3;
+  vec2 drops = vec2(0.0);
+  for(int i = 0; i < 10; i++) {
+    drops += Drops(uv, 42424.43 + float(i) * 12313.432);
+  }
 
-  uv -= drops * 10.0;
-  uv = fract(uv * 10.0);
+  uv -= drops * 100.0;
 
-  vec3 base = BaseColor(uv);
-  // gl_FragColor = vec4(base, 1.0);
-  gl_FragColor = vec4(uv, 0.0, 1.0);
+  vec4 color = texture2D(u_texture, uv);
+
+  gl_FragColor = color;
 }

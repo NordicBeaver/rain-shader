@@ -2,6 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import rainVertShader from './rain.vert.glsl?raw';
 import rainFragShader from './rain.frag.glsl?raw';
+import imageUrl from './forest.jpg';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -15,11 +16,13 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 app.appendChild(renderer.domElement);
 
 const geometry = new THREE.PlaneGeometry(10, 10, 1, 1);
+const texture = new THREE.TextureLoader().load(imageUrl);
 const material = new THREE.ShaderMaterial({
   vertexShader: rainVertShader,
   fragmentShader: rainFragShader,
   uniforms: {
     u_time: { value: 0 },
+    u_texture: { value: texture },
   },
 });
 const cube = new THREE.Mesh(geometry, material);
