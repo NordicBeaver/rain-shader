@@ -18,11 +18,15 @@ const geometry = new THREE.PlaneGeometry(10, 10, 1, 1);
 const material = new THREE.ShaderMaterial({
   vertexShader: rainVertShader,
   fragmentShader: rainFragShader,
+  uniforms: {
+    u_time: { value: 0 },
+  },
 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-function animationFrame() {
+function animationFrame(time: number) {
+  cube.material.uniforms.u_time.value = time / 1000;
   renderer.render(scene, camera);
   requestAnimationFrame(animationFrame);
 }

@@ -1,4 +1,5 @@
 in vec2 uvInterpolator;
+uniform float u_time;
 
 float Random11(float inputValue, float seed) {
   return fract(sin(inputValue * 345.456) * seed);
@@ -23,7 +24,8 @@ vec2 Drops(vec2 uv, float seed) {
   vec2 cellCenter = vec2(0.5);
   float distanceFromCenter = distance(cellUv, cellCenter);
   float isDropShown = step(0.8, Random21(cellIndex, seed));
-  float drop = smoothstep(0.2, 0.0, distanceFromCenter) * isDropShown;
+  float dropIntensity = 1.0 - fract(u_time * 0.5 + Random21(cellIndex, seed) * 10.0) * 2.0;
+  float drop = clamp(smoothstep(0.2, 0.0, distanceFromCenter) * isDropShown * dropIntensity, 0.0, 1.0);
   return vec2(drop);
 }
 
