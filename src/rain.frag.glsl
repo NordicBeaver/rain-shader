@@ -1,5 +1,9 @@
 in vec2 uvInterpolator;
 
+float Random11(float inputValue, float seed) {
+  return fract(sin(inputValue * 345.456) * seed);
+}
+
 float Random21(vec2 inputValue, float seed) {
   return fract(sin(dot(inputValue, vec2(123.456, 43.12))) * seed);
 }
@@ -12,11 +16,9 @@ vec2 Drops(vec2 uv) {
   float cellsResolution = 10.0;
   vec2 uvRepeated = uv * cellsResolution;
   vec2 cellIndex = floor(uvRepeated);
-  vec2 cellUv = fract(uvRepeated);
-  vec2 random = Random22(cellIndex);
-  float distanceFromDrop = distance(cellUv, random);
-  float drop = smoothstep(0.2, 0.0, distanceFromDrop);
-  return vec2(drop);
+  vec2 shift = vec2(Random11(cellIndex.y, 89432.234), 0.0);
+  vec2 cellUv = fract(uvRepeated + shift);
+  return cellUv;
 }
 
 void main() {
