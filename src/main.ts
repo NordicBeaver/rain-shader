@@ -25,7 +25,6 @@ const planeWidth = planeHeight / aspectRatio;
 
 const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 1, 1);
 
-texture.image;
 const material = new THREE.ShaderMaterial({
   vertexShader: rainVertShader,
   fragmentShader: rainFragShader,
@@ -34,11 +33,11 @@ const material = new THREE.ShaderMaterial({
     u_texture: { value: texture },
   },
 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+const plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
 
 function animationFrame(time: number) {
-  cube.material.uniforms.u_time.value = time / 1000;
+  plane.material.uniforms.u_time.value = time / 1000;
   renderer.render(scene, camera);
   requestAnimationFrame(animationFrame);
 }
