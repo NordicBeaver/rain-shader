@@ -13,13 +13,13 @@ camera.position.z = 7;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
 app.appendChild(renderer.domElement);
 
 const textureLoader = new THREE.TextureLoader();
 const texture = await textureLoader.loadAsync(imageUrl);
 
 const aspectRatio = texture.image.height / texture.image.width;
-console.log(aspectRatio);
 const planeHeight = 10;
 const planeWidth = planeHeight / aspectRatio;
 
