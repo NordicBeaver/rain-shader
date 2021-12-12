@@ -50,7 +50,7 @@ void main() {
     drops += Drops(uv, 42424.43 + float(i) * 12313.432);
   }
 
-  uv -= drops * 100.0;
+  uv -= drops * 20.0;
 
   vec4 color = texture2D(u_texture, uv);
 
