@@ -2,7 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import rainVertShader from './rain.vert.glsl?raw';
 import rainFragShader from './rain.frag.glsl?raw';
-import imageUrl from './forest.jpg';
+import imageUrl from './background.jpg';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
@@ -15,8 +15,17 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 app.appendChild(renderer.domElement);
 
-const geometry = new THREE.PlaneGeometry(10, 10, 1, 1);
-const texture = new THREE.TextureLoader().load(imageUrl);
+const textureLoader = new THREE.TextureLoader();
+const texture = await textureLoader.loadAsync(imageUrl);
+
+const aspectRatio = texture.image.height / texture.image.width;
+console.log(aspectRatio);
+const planeHeight = 10;
+const planeWidth = planeHeight / aspectRatio;
+
+const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 1, 1);
+
+texture.image;
 const material = new THREE.ShaderMaterial({
   vertexShader: rainVertShader,
   fragmentShader: rainFragShader,
