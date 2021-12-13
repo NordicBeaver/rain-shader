@@ -39,7 +39,7 @@ vec2 Drops(vec2 uv, float seed) {
 
   float isInsideDrop = 1.0 - step(0.1, distanceFromCenter);
 
-  vec2 vecToCenter = normalize(cellUv - cellCenter);
+  vec2 vecToCenter = normalize(cellCenter - cellUv);
 
   vec2 dropValue = vecToCenter * distanceFromCenter * distanceFromCenter * 40.0;
 
@@ -54,7 +54,7 @@ void main() {
     drops += Drops(uv, 42424.43 + float(i) * 12313.432);
   }
 
-  uv -= drops;
+  uv += drops;
 
   vec4 color = texture2D(u_texture, uv);
 
