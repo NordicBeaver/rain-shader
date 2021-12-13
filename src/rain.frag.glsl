@@ -32,12 +32,16 @@ vec2 Drops(vec2 uv, float seed) {
   float distanceFromCenter = distance(cellUv, cellCenter);
 
   float isDropShown = step(0.8, Random21(cellIndex, seed + 14244.324));
-  float dropIntensity = 1.0 - fract(u_time * 0.2 + Random21(cellIndex, seed + 32132.432) * 2.0) * 2.0;
+
+  float dropIntensity = 1.0 - fract(u_time * 0.1 + Random21(cellIndex, seed + 32132.432) * 2.0) * 2.0;
+  dropIntensity = sign(dropIntensity) * abs(dropIntensity * dropIntensity * dropIntensity * dropIntensity);
   dropIntensity = clamp(dropIntensity, 0.0, 1.0);
+
   float isInsideDrop = 1.0 - step(0.1, distanceFromCenter);
 
   vec2 vecToCenter = normalize(cellUv - cellCenter);
-  vec2 dropValue = vecToCenter * distanceFromCenter * distanceFromCenter;
+
+  vec2 dropValue = vecToCenter * distanceFromCenter * distanceFromCenter * 40.0;
 
   vec2 drop = dropValue * isInsideDrop * isDropShown * dropIntensity;
   return drop;
@@ -50,7 +54,7 @@ void main() {
     drops += Drops(uv, 42424.43 + float(i) * 12313.432);
   }
 
-  uv -= drops * 20.0;
+  uv -= drops;
 
   vec4 color = texture2D(u_texture, uv);
 
